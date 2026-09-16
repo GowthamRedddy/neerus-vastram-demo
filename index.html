@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sri Neeru's Vastram Boutique — Deepthi Sri Nagar, Miyapur, Hyderabad</title>
+<meta name="description" content="Sri Neeru's Vastram Boutique, Deepthi Sri Nagar, Miyapur Hyderabad — demo website preview. Contact on WhatsApp.">
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --brand:#7c3aed; --brand-dark:#5b21b6; --accent:#f59e0b;
+    --ink:#1e1b2e; --ink-soft:#55516b; --paper:#faf9fc; --card:#ffffff;
+    --line:#e7e3f2; --ok:#16a34a;
+    --radius:14px; --shadow:0 8px 24px rgba(30,27,46,.08);
+    --font-display:'Segoe UI',system-ui,-apple-system,sans-serif;
+    --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
+    --step-0:clamp(0.95rem, 0.9rem + 0.3vw, 1.05rem);
+    --step-1:clamp(1.15rem, 1.05rem + 0.6vw, 1.4rem);
+    --step-2:clamp(1.5rem, 1.3rem + 1.2vw, 2.1rem);
+    --step-3:clamp(2rem, 1.6rem + 2.4vw, 3rem);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--font-body); font-size:var(--step-0); line-height:1.6;
+    color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  img{max-width:100%; display:block}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+  /* ============ DEMO RIBBON ============ */
+  .demo-ribbon{
+    position:sticky; top:0; z-index:50; text-align:center;
+    background:repeating-linear-gradient(45deg,#1e1b2e,#1e1b2e 12px,#2c2745 12px,#2c2745 24px);
+    color:#fde68a; font-size:.8rem; font-weight:600; letter-spacing:.08em;
+    padding:.5rem 1rem; text-transform:uppercase;
+  }
+
+  /* ============ LAYOUT ============ */
+  .wrap{width:min(1100px,92%); margin-inline:auto}
+  section{padding:clamp(3rem,6vw,5rem) 0}
+
+  /* ============ HEADER ============ */
+  header.site{
+    position:sticky; top:0; z-index:40; background:rgba(250,249,252,.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:.9rem 0}
+  .brand{font-family:var(--font-display); font-weight:800; font-size:var(--step-1);
+    letter-spacing:-.02em; color:var(--brand-dark); text-decoration:none}
+  .nav a.btn{padding:.55rem 1.1rem; font-size:.9rem}
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:var(--brand); color:#fff; text-decoration:none;
+    font-weight:700; border-radius:999px; padding:.8rem 1.6rem;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    box-shadow:0 4px 14px rgba(124,58,237,.35);
+  }
+  .btn:hover{background:var(--brand-dark); transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(124,58,237,.45)}
+  .btn:active{transform:translateY(0)}
+  .btn.wa{background:var(--ok); box-shadow:0 4px 14px rgba(22,163,74,.35)}
+  .btn.wa:hover{background:#15803d}
+  .btn.ghost{background:transparent; color:var(--brand-dark);
+    border:2px solid var(--brand); box-shadow:none}
+  .btn.ghost:hover{background:var(--brand); color:#fff}
+
+  /* ============ HERO ============ */
+  .hero{padding-top:clamp(3rem,8vw,6rem); text-align:center}
+  .hero .kicker{
+    display:inline-block; background:#f3efff; color:var(--brand-dark);
+    font-weight:700; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase;
+    border-radius:999px; padding:.35rem 1rem; margin-bottom:1.2rem;
+  }
+  .hero h1{
+    font-family:var(--font-display); font-size:var(--step-3);
+    line-height:1.12; letter-spacing:-.03em; font-weight:800;
+  }
+  .hero h1 em{font-style:normal; color:var(--brand)}
+  .hero p.lead{
+    max-width:38ch; margin:1.2rem auto 2rem; color:var(--ink-soft); font-size:var(--step-1);
+  }
+  .hero .cta-row{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap}
+
+  /* ============ CARDS / GRIDS ============ */
+  h2.sec{
+    font-family:var(--font-display); font-size:var(--step-2); letter-spacing:-.02em;
+    text-align:center; margin-bottom:.4rem;
+  }
+  p.sec-sub{text-align:center; color:var(--ink-soft); margin-bottom:2.5rem}
+  .grid{display:grid; gap:1.4rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:1.6rem; box-shadow:var(--shadow);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{transform:translateY(-4px); box-shadow:0 14px 30px rgba(30,27,46,.12)}
+  .card .icon{
+    width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+    background:#f3efff; font-size:1.3rem; margin-bottom:1rem;
+  }
+  .card h3{font-size:var(--step-1); margin-bottom:.4rem; letter-spacing:-.01em}
+  .card p{color:var(--ink-soft)}
+
+  /* ============ GALLERY ============ */
+  .gallery{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .ph{
+    aspect-ratio:4/5; border-radius:var(--radius); border:1px solid var(--line);
+    background:linear-gradient(135deg,#f3efff,#e9e3fb); display:grid; place-items:center;
+    color:var(--brand-dark); font-weight:600; font-size:.9rem; text-align:center;
+    padding:1rem; transition:transform .2s ease;
+  }
+  .ph:hover{transform:scale(1.02)}
+
+  /* ============ CONTACT ============ */
+  .contact-card{
+    background:linear-gradient(135deg,var(--brand-dark),var(--brand));
+    color:#fff; border-radius:calc(var(--radius) * 1.4);
+    padding:clamp(2rem,5vw,3.5rem); text-align:center; box-shadow:var(--shadow);
+  }
+  .contact-card h2{font-family:var(--font-display); font-size:var(--step-2); margin-bottom:.6rem}
+  .contact-card p{opacity:.9; margin-bottom:1.6rem}
+  .contact-card .btn{background:#fff; color:var(--brand-dark); box-shadow:none}
+  .contact-card .btn:hover{background:var(--accent); color:#fff}
+
+  /* ============ FOOTER ============ */
+  footer.site{border-top:1px solid var(--line); padding:2rem 0 3rem; text-align:center;
+    color:var(--ink-soft); font-size:.85rem}
+  footer.site .disclaimer{
+    margin-top:.8rem; font-size:.75rem; opacity:.75; max-width:60ch; margin-inline:auto;
+  }
+
+  /* ============ MOTION SAFETY ============ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important; transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+
+<style>:root{--brand:#166534;--brand-dark:#14532d;--accent:#d4a017;}
+  .hero .kicker{background:#14532d18;color:#166534;}
+  .card .icon{background:#14532d14;color:#166534;}
+</style>
+</head>
+<body>
+
+<div class="demo-ribbon">⚠ Demo preview — not the official website</div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="#top">Sri Neeru's Vastram Boutique</a>
+    <a class="btn" href="#contact">Book Now</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="kicker">Deepthi Sri Nagar, Miyapur, Hyderabad</span>
+      <h1>Sri Neeru's Vastram Boutique<br><em>— see it all online</em></h1>
+      <p class="lead">Your neighbourhood vastram boutique near GHMC Park — open 10 AM to 9 PM, every day.</p>
+      <div class="cta-row">
+        <a class="btn wa" href="https://wa.me/919000926443?text=Namaste!%20I%20found%20Sri%20Neerus%20Vastram%20online%20and%20want%20to%20know%20more."
+           aria-label="Chat with Sri Neeru's Vastram Boutique on WhatsApp">💬 WhatsApp Us</a>
+        <a class="btn ghost" href="#services">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <h2 class="sec">What we offer</h2>
+      <p class="sec-sub">From their public listings — verified info only.</p>
+      <div class="grid">
+        <div class="card"><div class="icon">🛍️</div><h3>Vastram Collections</h3><p>Ladies boutique collections curated for everyday and occasions.</p></div>
+        <div class="card"><div class="icon">🕙</div><h3>Open 10 AM – 9 PM</h3><p>Long hours for your convenience — near GHMC Park, Deepthi Sri Nagar.</p></div>
+        <div class="card"><div class="icon">💬</div><h3>Easy Contact</h3><p>Call or WhatsApp 90009 26443 / 90326 09046.</p></div></div><h3>Service One</h3><p>Describe a real service here, in the owner's own words from public listings.</p></div>
+        <div class="card"><div class="icon">🏆</div><h3>Service Two</h3><p>Second offering — keep the wording honest and specific.</p></div>
+        <div class="card"><div class="icon">💚</div><h3>Why customers choose us</h3><p>Real strengths from public reviews — never invented claims.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" style="background:#fff; border-block:1px solid var(--line)">
+    <div class="wrap">
+      <h2 class="sec">Gallery</h2>
+      <p class="sec-sub">Owner's real photos go here after approval — placeholders until then.</p>
+      <div class="gallery">
+        <div class="ph">New Collections<br>(from owner)</div>
+        <div class="ph">Occasion Wear<br>(from owner)</div>
+        <div class="ph">Everyday Vastram<br>(from owner)</div>
+        <div class="ph">In Store<br>(from owner)</div></div>
+        <div class="ph">Photo 2<br>(from owner)</div>
+        <div class="ph">Photo 3<br>(from owner)</div>
+        <div class="ph">Photo 4<br>(from owner)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-card">
+        <h2>Visit or message us</h2>
+        <p>Sri Neeru's Vastram Boutique · Deepthi Sri Nagar, Miyapur, Hyderabad</p>
+        <a class="btn" href="https://wa.me/919000926443" aria-label="Open WhatsApp chat with Sri Neeru's Vastram Boutique">💬 Chat on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>© 2026-09-16 Sri Neeru's Vastram Boutique · Deepthi Sri Nagar, Miyapur, Hyderabad</p>
+    <p class="disclaimer">This is a design demo created by Gowtham (web designer, Hyderabad) for preview purposes only. Not the official website. Business details shown are from public listings; photos are placeholders until the owner approves.</p>
+  </div>
+</footer>
+
+</body>
+</html>
