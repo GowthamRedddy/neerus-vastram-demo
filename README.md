@@ -1,4 +1,5 @@
-# Demo Website
+# Sri Neeru's Vastram Boutique — demo website
 
-Design preview built by Gowtham (web designer, Hyderabad) for demonstration purposes only.
-Not the official website. All details from public listings; photos are placeholders until owner approval.
+**Live preview:** https://GowthamRedddy.github.io/neerus-vastram-demo/
+
+Design sample built by Gowtham (Hyderabad web design). Demo only — not the business's official site; details shown are placeholders pending approval.

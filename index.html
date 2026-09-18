@@ -5,145 +5,186 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sri Neeru's Vastram Boutique — Deepthi Sri Nagar, Miyapur, Hyderabad</title>
 <meta name="description" content="Sri Neeru's Vastram Boutique, Deepthi Sri Nagar, Miyapur Hyderabad — demo website preview. Contact on WhatsApp.">
+<!--
+  PERMANENT MOTION STANDARD (GOWTHAM, 2026-09-18):
+  dark #09090b palette · asymmetric Bento Grid · py-24 · micro-borders ·
+  backdrop-blur glassmorphism · scroll reveals (slide up + scale + fade from blur) ·
+  3D-tilt / scale hovers · cubic-bezier(0.16,1,0.3,1) · fluid clamp() type ·
+  explicit aspect ratios (zero layout shift). React/Tailwind/Framer Motion build
+  variant: demo_react_template.jsx
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/framer-motion@11/dist/framer-motion.js"></script>
+<script>
+  /* ---- Motion engine config (Framer Motion UMD, animates DOM via WAAPI) ---- */
+  const EASE = [0.16, 1, 0.3, 1];
+  document.addEventListener("DOMContentLoaded", () => {
+    const { animate, inView, stagger } = window.Motion;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* scroll reveals: slide up + scale + fade from blur */
+    inView("[data-reveal]", (el) => {
+      if (reduced) return;
+      animate(el.target,
+        { opacity: [0, 1], transform: ["translateY(48px) scale(0.94)", "translateY(0px) scale(1)"], filter: ["blur(10px)", "blur(0px)"] },
+        { duration: 0.9, delay: (parseFloat(el.target.dataset.reveal) || 0), ease: EASE });
+    }, { margin: "0px 0px -12% 0px" });
+
+    /* 3D tilt hovers (pointer-fine devices only) */
+    if (matchMedia("(pointer:fine)").matches && !reduced) {
+      document.querySelectorAll("[data-tilt]").forEach((card) => {
+        card.style.transformPerspective = "900px";
+        card.addEventListener("pointermove", (e) => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          animate(card, { rotateX: -y * 8, rotateY: x * 8, scale: 1.02 },
+            { duration: 0.35, ease: EASE });
+        });
+        card.addEventListener("pointerleave", () => {
+          animate(card, { rotateX: 0, rotateY: 0, scale: 1 }, { duration: 0.5, ease: EASE });
+        });
+      });
+    }
+
+    /* staggered hero entrance */
+    if (!reduced) {
+      animate("[data-hero-stagger]",
+        { opacity: [0, 1], transform: ["translateY(28px)", "translateY(0)"] },
+        { duration: 0.8, delay: stagger(0.1), ease: EASE });
+    }
+  });
+</script>
 <style>
-  /* ============ DESIGN TOKENS ============ */
+  /* ============ DESIGN TOKENS — dark premium ============ */
   :root{
-    --brand:#7c3aed; --brand-dark:#5b21b6; --accent:#f59e0b;
-    --ink:#1e1b2e; --ink-soft:#55516b; --paper:#faf9fc; --card:#ffffff;
-    --line:#e7e3f2; --ok:#16a34a;
-    --radius:14px; --shadow:0 8px 24px rgba(30,27,46,.08);
-    --font-display:'Segoe UI',system-ui,-apple-system,sans-serif;
-    --font-body:'Segoe UI',system-ui,-apple-system,sans-serif;
-    --step-0:clamp(0.95rem, 0.9rem + 0.3vw, 1.05rem);
-    --step-1:clamp(1.15rem, 1.05rem + 0.6vw, 1.4rem);
-    --step-2:clamp(1.5rem, 1.3rem + 1.2vw, 2.1rem);
-    --step-3:clamp(2rem, 1.6rem + 2.4vw, 3rem);
+    --bg:#09090b; --bg-soft:#111113; --card:rgba(255,255,255,.04);
+    --line:rgba(255,255,255,.06); --line-strong:rgba(255,255,255,.12);
+    --ink:#fafafa; --ink-soft:#a1a1aa; --ink-faint:#71717a;
+    --accent:#e4e4e7; --wa:#22c55e; --wa-dark:#16a34a;
+    --radius:20px; --ease:cubic-bezier(0.16,1,0.3,1);
+    --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --step--1:clamp(0.85rem,0.82rem + 0.2vw,0.95rem);
+    --step-0:clamp(0.95rem,0.92rem + 0.3vw,1.08rem);
+    --step-1:clamp(1.15rem,1.05rem + 0.6vw,1.4rem);
+    --step-2:clamp(1.5rem,1.3rem + 1.2vw,2.1rem);
+    --step-3:clamp(2.1rem,1.5rem + 3vw,3.6rem);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    font-family:var(--font-body); font-size:var(--step-0); line-height:1.6;
-    color:var(--ink); background:var(--paper);
-    -webkit-font-smoothing:antialiased; overflow-x:hidden;
-  }
-  img{max-width:100%; display:block}
-  a{color:inherit}
-  :focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:4px}
+  body{font-family:var(--font);font-size:var(--step-0);line-height:1.6;color:var(--ink);
+    background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 
   /* ============ DEMO RIBBON ============ */
-  .demo-ribbon{
-    position:sticky; top:0; z-index:50; text-align:center;
-    background:repeating-linear-gradient(45deg,#1e1b2e,#1e1b2e 12px,#2c2745 12px,#2c2745 24px);
-    color:#fde68a; font-size:.8rem; font-weight:600; letter-spacing:.08em;
-    padding:.5rem 1rem; text-transform:uppercase;
-  }
+  .demo-ribbon{position:sticky;top:0;z-index:50;text-align:center;
+    background:repeating-linear-gradient(45deg,#18181b,#18181b 12px,#27272a 12px,#27272a 24px);
+    color:#fde68a;font-size:.78rem;font-weight:600;letter-spacing:.08em;
+    padding:.5rem 1rem;text-transform:uppercase}
 
   /* ============ LAYOUT ============ */
-  .wrap{width:min(1100px,92%); margin-inline:auto}
-  section{padding:clamp(3rem,6vw,5rem) 0}
+  .wrap{width:min(1150px,92%);margin-inline:auto}
+  section{padding:clamp(4rem,8vw,6rem) 0} /* py-24 spirit at every viewport */
 
   /* ============ HEADER ============ */
-  header.site{
-    position:sticky; top:0; z-index:40; background:rgba(250,249,252,.92);
-    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
-  }
-  .nav{display:flex; align-items:center; justify-content:space-between; padding:.9rem 0}
-  .brand{font-family:var(--font-display); font-weight:800; font-size:var(--step-1);
-    letter-spacing:-.02em; color:var(--brand-dark); text-decoration:none}
-  .nav a.btn{padding:.55rem 1.1rem; font-size:.9rem}
+  header.site{position:sticky;top:2.2rem;z-index:40;
+    background:rgba(9,9,11,.7);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 0}
+  .brand{font-weight:800;font-size:var(--step-1);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+  .nav a.btn{padding:.55rem 1.15rem;font-size:.88rem}
 
   /* ============ BUTTONS ============ */
-  .btn{
-    display:inline-flex; align-items:center; gap:.5rem;
-    background:var(--brand); color:#fff; text-decoration:none;
-    font-weight:700; border-radius:999px; padding:.8rem 1.6rem;
-    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-    box-shadow:0 4px 14px rgba(124,58,237,.35);
-  }
-  .btn:hover{background:var(--brand-dark); transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(124,58,237,.45)}
-  .btn:active{transform:translateY(0)}
-  .btn.wa{background:var(--ok); box-shadow:0 4px 14px rgba(22,163,74,.35)}
-  .btn.wa:hover{background:#15803d}
-  .btn.ghost{background:transparent; color:var(--brand-dark);
-    border:2px solid var(--brand); box-shadow:none}
-  .btn.ghost:hover{background:var(--brand); color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:.55rem;background:var(--accent);
+    color:#09090b;text-decoration:none;font-weight:700;border-radius:999px;
+    padding:.85rem 1.7rem;border:1px solid var(--line-strong);
+    transition:transform .3s var(--ease),box-shadow .3s var(--ease),background .3s var(--ease)}
+  .btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 30px rgba(255,255,255,.08)}
+  .btn:active{transform:translateY(0) scale(.99)}
+  .btn.wa{background:var(--wa);color:#052e12;border-color:rgba(34,197,94,.4)}
+  .btn.wa:hover{background:var(--wa-dark);color:#f0fdf4}
+  .btn.ghost{background:rgba(255,255,255,.03);color:var(--ink);border:1px solid var(--line-strong)}
+  .btn.ghost:hover{background:rgba(255,255,255,.08)}
 
   /* ============ HERO ============ */
-  .hero{padding-top:clamp(3rem,8vw,6rem); text-align:center}
-  .hero .kicker{
-    display:inline-block; background:#f3efff; color:var(--brand-dark);
-    font-weight:700; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase;
-    border-radius:999px; padding:.35rem 1rem; margin-bottom:1.2rem;
-  }
-  .hero h1{
-    font-family:var(--font-display); font-size:var(--step-3);
-    line-height:1.12; letter-spacing:-.03em; font-weight:800;
-  }
-  .hero h1 em{font-style:normal; color:var(--brand)}
-  .hero p.lead{
-    max-width:38ch; margin:1.2rem auto 2rem; color:var(--ink-soft); font-size:var(--step-1);
-  }
-  .hero .cta-row{display:flex; gap:1rem; justify-content:center; flex-wrap:wrap}
+  .hero{padding-top:clamp(4rem,9vw,7rem)}
+  .kicker{display:inline-block;background:rgba(255,255,255,.04);border:1px solid var(--line);
+    color:var(--ink-soft);font-weight:600;font-size:.8rem;letter-spacing:.14em;
+    text-transform:uppercase;border-radius:999px;padding:.4rem 1.05rem;margin-bottom:1.4rem}
+  h1{font-size:var(--step-3);line-height:1.06;letter-spacing:-.03em;font-weight:800;max-width:16ch}
+  h1 em{font-style:normal;background:linear-gradient(90deg,#fafafa 20%,#71717a);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  p.lead{max-width:44ch;margin:1.4rem 0 2.2rem;color:var(--ink-soft);font-size:var(--step-1)}
+  .cta-row{display:flex;gap:.9rem;flex-wrap:wrap}
 
-  /* ============ CARDS / GRIDS ============ */
-  h2.sec{
-    font-family:var(--font-display); font-size:var(--step-2); letter-spacing:-.02em;
-    text-align:center; margin-bottom:.4rem;
-  }
-  p.sec-sub{text-align:center; color:var(--ink-soft); margin-bottom:2.5rem}
-  .grid{display:grid; gap:1.4rem; grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:1.6rem; box-shadow:var(--shadow);
-    transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .card:hover{transform:translateY(-4px); box-shadow:0 14px 30px rgba(30,27,46,.12)}
-  .card .icon{
-    width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
-    background:#f3efff; font-size:1.3rem; margin-bottom:1rem;
-  }
-  .card h3{font-size:var(--step-1); margin-bottom:.4rem; letter-spacing:-.01em}
-  .card p{color:var(--ink-soft)}
+  /* ============ BENTO GRID ============ */
+  h2.sec{font-size:var(--step-2);letter-spacing:-.02em;font-weight:700;max-width:24ch}
+  p.sec-sub{color:var(--ink-soft);margin:.7rem 0 3rem;max-width:52ch}
+  .bento{display:grid;gap:1rem;grid-template-columns:repeat(6,1fr)}
+  .tile{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    padding:clamp(1.5rem,3vw,2.5rem);position:relative;overflow:hidden;
+    transition:border-color .3s var(--ease);will-change:transform}
+  .tile:hover{border-color:var(--line-strong)}
+  .t-a{grid-column:span 4;grid-row:span 2}
+  .t-b{grid-column:span 2;grid-row:span 2}
+  .t-c{grid-column:span 3}
+  .t-d{grid-column:span 3}
+  @media(max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}
+    .t-a,.t-b,.t-c,.t-d{grid-column:span 2;grid-row:auto}}
+  @media(max-width:560px){.bento{grid-template-columns:1fr}
+    .t-a,.t-b,.t-c,.t-d{grid-column:span 1}}
+
+  .tile .icon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+    background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:1.25rem;
+    color:var(--ink);margin-bottom:1.1rem}
+  .tile h3{font-size:var(--step-1);letter-spacing:-.015em;font-weight:700}
+  .tile p{color:var(--ink-soft);margin-top:.5rem;font-size:var(--step--1)}
+  .stat{font-size:var(--step-3);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .stat-sub{color:var(--ink-faint);font-size:var(--step--1);margin-top:.6rem}
+  .media{aspect-ratio:16/7;border-radius:14px;margin-bottom:1.4rem;overflow:hidden;
+    border:1px solid var(--line);
+    background:linear-gradient(135deg,#18181b,#09090b);display:grid;place-items:center;
+    color:var(--ink-faint);font-size:.85rem;text-align:center;padding:1rem}
+  .media.ratio-wide{aspect-ratio:16/9;margin-bottom:0}
+  .tile-b .media{aspect-ratio:4/5;margin:0 0 1.2rem}
 
   /* ============ GALLERY ============ */
-  .gallery{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-  .ph{
-    aspect-ratio:4/5; border-radius:var(--radius); border:1px solid var(--line);
-    background:linear-gradient(135deg,#f3efff,#e9e3fb); display:grid; place-items:center;
-    color:var(--brand-dark); font-weight:600; font-size:.9rem; text-align:center;
-    padding:1rem; transition:transform .2s ease;
-  }
-  .ph:hover{transform:scale(1.02)}
+  .gallery{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .ph{aspect-ratio:4/5;border-radius:var(--radius);border:1px solid var(--line);
+    background:linear-gradient(135deg,#141416,#0c0c0e);display:grid;place-items:center;
+    color:var(--ink-faint);font-size:.85rem;text-align:center;padding:1rem;
+    transition:transform .35s var(--ease),border-color .35s var(--ease)}
+  .ph:hover{transform:scale(1.03);border-color:var(--line-strong)}
 
   /* ============ CONTACT ============ */
-  .contact-card{
-    background:linear-gradient(135deg,var(--brand-dark),var(--brand));
-    color:#fff; border-radius:calc(var(--radius) * 1.4);
-    padding:clamp(2rem,5vw,3.5rem); text-align:center; box-shadow:var(--shadow);
-  }
-  .contact-card h2{font-family:var(--font-display); font-size:var(--step-2); margin-bottom:.6rem}
-  .contact-card p{opacity:.9; margin-bottom:1.6rem}
-  .contact-card .btn{background:#fff; color:var(--brand-dark); box-shadow:none}
-  .contact-card .btn:hover{background:var(--accent); color:#fff}
+  .contact-card{background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+    border:1px solid var(--line-strong);border-radius:calc(var(--radius)*1.3);
+    backdrop-filter:blur(18px);padding:clamp(2rem,5vw,3.5rem);text-align:center}
+  .contact-card h2{font-size:var(--step-2);letter-spacing:-.02em;margin-bottom:.6rem}
+  .contact-card p{color:var(--ink-soft);margin-bottom:1.6rem}
 
   /* ============ FOOTER ============ */
-  footer.site{border-top:1px solid var(--line); padding:2rem 0 3rem; text-align:center;
-    color:var(--ink-soft); font-size:.85rem}
-  footer.site .disclaimer{
-    margin-top:.8rem; font-size:.75rem; opacity:.75; max-width:60ch; margin-inline:auto;
-  }
+  footer.site{border-top:1px solid var(--line);padding:2.5rem 0 3rem;text-align:center;
+    color:var(--ink-faint);font-size:.82rem}
+  footer.site .disclaimer{margin-top:.8rem;font-size:.72rem;opacity:.75;max-width:62ch;margin-inline:auto}
 
   /* ============ MOTION SAFETY ============ */
   @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation:none!important; transition:none!important}
+    *,*::before,*::after{animation:none!important;transition:none!important}
     html{scroll-behavior:auto}
+    [data-reveal]{opacity:1!important;filter:none!important;transform:none!important}
   }
 </style>
 
 <style>:root{--brand:#166534;--brand-dark:#14532d;--accent:#d4a017;}
-  .hero .kicker{background:#14532d18;color:#166534;}
-  .card .icon{background:#14532d14;color:#166534;}
+  .hero .kicker{background:#14532d26;color:#d4a017;}
+  .tile .icon{background:#14532d33;color:#d4a017;}
+  .stat{color:#d4a017;}
 </style>
 </head>
 <body>
@@ -161,10 +202,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <span class="kicker">Deepthi Sri Nagar, Miyapur, Hyderabad</span>
-      <h1>Sri Neeru's Vastram Boutique<br><em>— see it all online</em></h1>
-      <p class="lead">Your neighbourhood vastram boutique near GHMC Park — open 10 AM to 9 PM, every day.</p>
-      <div class="cta-row">
+      <span class="kicker" data-hero-stagger>Deepthi Sri Nagar, Miyapur, Hyderabad</span>
+      <h1 data-hero-stagger>Sri Neeru's Vastram Boutique<br><em>— experience it online</em></h1>
+      <p class="lead" data-hero-stagger>Everything about Sri Neeru's Vastram Boutique in one premium place — browse, choose, and book directly on WhatsApp in seconds.</p>
+      <div class="cta-row" data-hero-stagger>
         <a class="btn wa" href="https://wa.me/919000926443?text=Namaste!%20I%20found%20Sri%20Neerus%20Vastram%20online%20and%20want%20to%20know%20more."
            aria-label="Chat with Sri Neeru's Vastram Boutique on WhatsApp">💬 WhatsApp Us</a>
         <a class="btn ghost" href="#services">Explore Services</a>
@@ -172,29 +213,47 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
+  <!-- BENTO FEATURES -->
   <section id="services">
     <div class="wrap">
-      <h2 class="sec">What we offer</h2>
-      <p class="sec-sub">Replace with the business's real services — verified info only.</p>
-      <div class="grid">
-        <div class="card"><div class="icon">🛍️</div><h3>Vastram Collections</h3><p>Ladies boutique collections curated for everyday and occasions.</p></div>
-        <div class="card"><div class="icon">🕙</div><h3>Open 10 AM – 9 PM</h3><p>Long hours for your convenience — near GHMC Park, Deepthi Sri Nagar.</p></div>
-        <div class="card"><div class="icon">💬</div><h3>Easy Contact</h3><p>Call or WhatsApp 90009 26443 / 90326 09046.</p></div>
+      <h2 class="sec" data-reveal="0">Why customers choose Sri Neeru's Vastram Boutique</h2>
+      <p class="sec-sub" data-reveal="0.05">Replace with the business's real strengths — verified public info only. Asymmetric Bento Grid, glassmorphic tiles, micro-borders.</p>
+      <div class="bento">
+        <article class="tile t-a" data-reveal="0" data-tilt>
+          <div class="media">Owner's real photo goes here (16:7)</div>
+          <h3>Vastram Collections</h3>
+          <p>Ladies boutique collections curated for everyday and occasions.</p>
+          <a class="btn" style="margin-top:1.6rem" href="#contact">Browse the collections</a>
+        </article>
+        <article class="tile tile-b t-b" data-reveal="0.08" data-tilt>
+          <div class="media">Photo (4:5)</div>
+          <div class="stat">10–9</div>
+          <p class="stat-sub">Open 10 AM to 9 PM, every day — near GHMC Park, Deepthi Sri Nagar.</p>
+        </article>
+        <article class="tile t-c" data-reveal="0" data-tilt>
+          <div class="icon">💬</div>
+          <h3>Easy Contact</h3>
+          <p>Call or WhatsApp 90009 26443 / 90326 09046.</p>
+        </article>
+        <article class="tile t-d" data-reveal="0" data-tilt>
+          <div class="icon">📍</div>
+          <h3>Find the boutique</h3>
+          <p>Deepthi Sri Nagar, near GHMC Park, Miyapur — the landmark from the boutique's public listings.</p>
+        </article>
       </div>
     </div>
   </section>
 
   <!-- GALLERY -->
-  <section id="gallery" style="background:#fff; border-block:1px solid var(--line)">
+  <section id="gallery" style="border-block:1px solid var(--line);background:#0c0c0e">
     <div class="wrap">
-      <h2 class="sec">Gallery</h2>
-      <p class="sec-sub">Owner's real photos go here after approval — placeholders until then.</p>
+      <h2 class="sec" data-reveal="0">Gallery</h2>
+      <p class="sec-sub" data-reveal="0.05">Owner's real photos go here after approval — placeholders until then.</p>
       <div class="gallery">
-        <div class="ph">New Collections<br>(from owner)</div>
-        <div class="ph">Occasion Wear<br>(from owner)</div>
-        <div class="ph">Everyday Vastram<br>(from owner)</div>
-        <div class="ph">In Store<br>(from owner)</div>
+        <div class="ph" data-reveal="0.00" data-tilt>New Collections<br>(from owner)</div>
+        <div class="ph" data-reveal="0.06" data-tilt>Occasion Wear<br>(from owner)</div>
+        <div class="ph" data-reveal="0.12" data-tilt>Everyday Vastram<br>(from owner)</div>
+        <div class="ph" data-reveal="0.18" data-tilt>In Store<br>(from owner)</div>
       </div>
     </div>
   </section>
@@ -202,10 +261,10 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="wrap">
-      <div class="contact-card">
+      <div class="contact-card" data-reveal="0" data-tilt>
         <h2>Visit or message us</h2>
         <p>Sri Neeru's Vastram Boutique · Deepthi Sri Nagar, Miyapur, Hyderabad</p>
-        <a class="btn" href="https://wa.me/919000926443" aria-label="Open WhatsApp chat with Sri Neeru's Vastram Boutique">💬 Chat on WhatsApp</a>
+        <a class="btn wa" href="https://wa.me/919000926443" aria-label="Open WhatsApp chat with Sri Neeru's Vastram Boutique">💬 Chat on WhatsApp</a>
       </div>
     </div>
   </section>
@@ -213,7 +272,7 @@
 
 <footer class="site">
   <div class="wrap">
-    <p>© 2026-09-16 Sri Neeru's Vastram Boutique · Deepthi Sri Nagar, Miyapur, Hyderabad</p>
+    <p>© 2026-09-18 Sri Neeru's Vastram Boutique · Deepthi Sri Nagar, Miyapur, Hyderabad</p>
     <p class="disclaimer">This is a design demo created by Gowtham (web designer, Hyderabad) for preview purposes only. Not the official website. Business details shown are from public listings; photos are placeholders until the owner approves.</p>
   </div>
 </footer>
